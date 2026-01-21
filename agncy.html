@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sekala Visual | Agensi Kreatif</title>
+    
+    <!-- Font Estetika Premium: Italiana (Serif) & DM Sans (Sans-Serif) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;400;500;700&family=Italiana&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            /* Palette Aesthetic Dark */
+            --bg-deep: #000000;
+            --bg-card: rgba(10, 10, 10, 0.6);
+            
+            --text-main: #FFFFFF;
+            --text-muted: #CCCCCC;
+            
+            /* Accents Ethereal */
+            --accent-glow: #D4AF37; /* Gold mewah */
+            --accent-secondary: #9D4EDD; /* Ungu */
+            
+            /* Typography */
+            --font-display: 'Italiana', serif;
+            --font-body: 'DM Sans', sans-serif;
+            
+            /* Spacing & Radius */
+            --radius-xl: 24px;
+            --radius-sm: 12px;
+            
+            /* Animation */
+            --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+            cursor: default;
+        }
+
+        /* --- ARTISTIC BACKGROUND --- */
+        .art-bg-image {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -3;
+            background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            filter: grayscale(20%) contrast(110%);
+        }
+
+        .bg-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2;
+            background: radial-gradient(circle at 50% 50%, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.9) 100%);
+        }
+
+        /* Mouse Spotlight Effect */
+        .spotlight {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            background: radial-gradient(
+                800px circle at var(--x, 50%) var(--y, 50%), 
+                rgba(157, 78, 221, 0.15), 
+                transparent 40%
+            );
+            mix-blend-mode: screen;
+            transition: background 0.1s ease;
+        }
+
+        /* --- Typography Utility --- */
+        h1, h2, h3 {
+            font-family: var(--font-display);
+            font-weight: 400;
+        }
+
+        /* --- Layout --- */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        /* --- Header --- */
+        header {
+            padding: 32px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: 0.3s;
+        }
+        
+        header.scrolled {
+            padding: 16px 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+            color: var(--text-main);
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+        
+        .logo span { color: var(--accent-glow); }
+
+        .nav-btn {
+            padding: 12px 28px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50px;
+            background: rgba(0,0,0,0.4);
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--ease-premium);
+            backdrop-filter: blur(5px);
+        }
+
+        .nav-btn:hover {
+            background: var(--accent-glow);
+            border-color: var(--accent-glow);
+            color: #000;
+            transform: translateY(-2px);
+        }
+
+        /* --- Hero Section --- */
+        #hero {
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            color: var(--accent-glow);
+            margin-bottom: 24px;
+            opacity: 0;
+            animation: fadeUp 1s var(--ease-premium) forwards 0.2s;
+        }
+
+        h1 {
+            font-size: clamp(3.5rem, 10vw, 8rem);
+            line-height: 0.9;
+            letter-spacing: -2px;
+            margin-bottom: 32px;
+            background: linear-gradient(to bottom, #fff, #b3b3b3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0;
+            animation: fadeUp 1s var(--ease-premium) forwards 0.4s;
+            text-shadow: 0 0 30px rgba(255,255,255,0.1);
+        }
+
+        .hero-desc {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            line-height: 1.7;
+            margin-bottom: 48px;
+            opacity: 0;
+            animation: fadeUp 1s var(--ease-premium) forwards 0.6s;
+        }
+
+        @keyframes fadeUp {
+            from { transform: translateY(40px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* --- Scroll Reveal Utility --- */
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s var(--ease-premium);
+        }
+        .reveal-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Team Section --- */
+        #team {
+            padding: 100px 0;
+            position: relative;
+        }
+
+        .section-header {
+            margin-bottom: 80px;
+            text-align: center;
+        }
+
+        .section-header h2 {
+            font-size: 3.5rem;
+            margin-bottom: 16px;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+        }
+
+        /* --- Member Card --- */
+        .member-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-xl);
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            transition: var(--ease-premium);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .member-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to top, rgba(255,255,255,0.05), transparent);
+            opacity: 0;
+            transition: 0.5s;
+            pointer-events: none;
+        }
+
+        .member-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255,255,255,0.3);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+        }
+
+        .member-card:hover::after { opacity: 1; }
+
+        /* Avatar */
+        .member-img {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 24px;
+            border: 2px solid rgba(255,255,255,0.1);
+            transition: var(--ease-premium);
+        }
+
+        .member-card:hover .member-img {
+            border-color: var(--accent-glow);
+            transform: scale(1.05);
+        }
+
+        .member-name {
+            font-size: 1.6rem;
+            margin-bottom: 6px;
+            color: #fff;
+        }
+
+        .member-role {
+            font-size: 0.85rem;
+            color: var(--accent-glow);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px; 
+            font-weight: 600;
+        }
+
+        /* --- Project Link Container --- */
+        .project-links-wrapper {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        /* --- Project Link Button --- */
+        .project-link-btn {
+            width: 100%;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--accent-glow);
+            color: var(--accent-glow);
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: var(--ease-premium);
+            font-size: 0.85rem;
+        }
+        
+        .project-link-btn:hover {
+            background: var(--accent-glow);
+            color: #000;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* --- Upload Zone --- */
+        .upload-zone {
+            width: 100%;
+            background: rgba(0,0,0,0.3);
+            border: 1px dashed rgba(255,255,255,0.2);
+            border-radius: var(--radius-sm);
+            padding: 24px;
+            cursor: pointer;
+            transition: var(--ease-premium);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .upload-zone:hover {
+            border-color: var(--accent-secondary);
+            background: rgba(157, 78, 221, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 1.4rem;
+            color: var(--text-muted);
+            transition: transform 0.3s;
+        }
+
+        .upload-zone:hover .upload-icon {
+            transform: translateY(-5px);
+            color: #fff;
+        }
+
+        .upload-text {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        input[type="file"] { display: none; }
+
+        /* --- File List (Enhanced) --- */
+        .file-list {
+            width: 100%;
+            margin-top: 20px;
+            text-align: left;
+            max-height: 200px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        /* Custom Scrollbar for file list */
+        .file-list::-webkit-scrollbar { width: 6px; }
+        .file-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+        .file-list::-webkit-scrollbar-track { background: transparent; }
+
+        .file-item {
+            background: rgba(255,255,255,0.05);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            border: 1px solid transparent;
+            transition: 0.2s;
+            animation: slideInItem 0.3s var(--ease-premium);
+        }
+
+        @keyframes slideInItem {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .file-item:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.1);
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Image Preview Thumbnail */
+        .file-preview {
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            object-fit: cover;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .file-name {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100px;
+        }
+
+        .delete-action {
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: 0.2s;
+            padding: 5px;
+        }
+        .delete-action:hover { color: #ff4757; }
+
+        /* --- Footer --- */
+        footer {
+            padding: 50px 0;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 100px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* --- Toast --- */
+        #toast-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 9999;
+        }
+        .toast {
+            background: rgba(20, 20, 20, 0.95);
+            color: #fff;
+            padding: 16px 24px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-glow);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            font-size: 0.9rem;
+            animation: slideIn 0.4s var(--ease-premium);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(10px);
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 3rem; }
+            .section-header h2 { font-size: 2.5rem; }
+            .member-card:hover { transform: none; } /* Disable lift on mobile for touch stability */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Artistik -->
+    <div class="art-bg-image"></div>
+    <div class="bg-overlay"></div>
+    <div class="spotlight" id="spotlight"></div>
+
+    <header id="header">
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">Sekala<span>Visual</span></a>
+                <a href="#team" class="nav-btn">Lihat Tim</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="hero">
+            <div class="container">
+                <div class="hero-label">Agensi Digital</div>
+                <h1>Kreativitas<br>Tanpa Batas</h1>
+                <p class="hero-desc">
+                    Ruang di mana estetika visual bertemu dengan teknologi modern. 
+                    Kami menciptakan pengalaman digital yang mendalam, elegan, dan berkesan.
+                </p>
+            </div>
+        </section>
+
+        <section id="team">
+            <div class="container">
+                <div class="section-header reveal-on-scroll">
+                    <h2>Para Kreator</h2>
+                    <p>Bakat unik dalam satu visi kolektif.</p>
+                </div>
+                
+                <div class="team-grid" id="teamGrid">
+                    <!-- JS Generated -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Sekala Visual. Dibuat dengan dedikasi.</p>
+        </div>
+    </footer>
+
+    <div id="toast-container"></div>
+
+    <script>
+        // --- Spotlight Mouse Effect Logic ---
+        document.addEventListener('mousemove', (e) => {
+            const spotlight = document.getElementById('spotlight');
+            const x = e.clientX;
+            const y = e.clientY;
+            spotlight.style.setProperty('--x', `${x}px`);
+            spotlight.style.setProperty('--y', `${y}px`);
+        });
+
+        // Data Tim
+        const teamMembers = [
+            { 
+                id: 1, 
+                name: "Adinda Ayu Wulandari", 
+                role: "Brand Identity", 
+                avatar: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjBsExhejAWqEZDzpqJzkjvbDu9jmp4o0vEO4crjr-6CxIjiAWoRwtCOHXMdeRWSKHSrGsJzHE6YXleXrUGFZq8zbedDCUHPCQBlbXFPxRVuYYLq99aBEJi-ZuoM-SbCDXOoy5chWfBBIGsvFC_smw6J5b9bRlNVnaY7Q-7Ja0YxAmsbGOsX7gjKpjWq3g/s1599/0d9294ee-817e-4e82-a07b-d9952664ccda.jpg" 
+            },
+            { 
+                id: 2, 
+                name: "Rania Nibrosa", 
+                role: "Fitur Pengembang", 
+                avatar: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhr66AyJIMLHZAPtRquu8MEL_po7L9JbgsTz7L_ZXQsaV7dvnq8iU68G3KD6qRjZVxHQluJpUZosLNb13m1U1CzfUwnESkZDEV703hbO4kmw0r3MFaq8xN6yDbIbkb8KuC9InJiB0c-eJSsWnSSYDb-FT7LCo5uh5gkaLjdsOTxDgmWVwfaKzZB89DVph0/s645/2ff72f38-a2a7-4ee6-b3ec-bed6df1b9ae0.jpg" 
+            },
+            { 
+                id: 3, 
+                name: "Rahmad Edo Hafsi Maulana", 
+                role: "Marketing", 
+                avatar: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjFA9PWShAoqRxtADSJZz8nBMSmO5ifk8Ob74s4uZye6WAgqPXRSZcOb4Lj0aZ7C8EN8L3KQS4yQXDj8T_oi24HDPbh2OsLnVYdxcSAwvVQshoNZntxLN9YWP2jpFBIn_3Np9Ls1wIBDk48Ym-4jqdr_towO9hC7fP_i95sT-nUaJYD8JCBHQwIHfQjkJs/s1280/25ce20eb-99c1-4dd0-bc07-cddee1e837c8.jpg" 
+            },
+            { 
+                id: 4, 
+                name: "Mukhammad Nivyan Abdillah", 
+                role: "Marketing", 
+                avatar: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhGAs7ZcSCeiFOdn9aGOKy8ySd-IaWGU8BWzbo5vZSp0As4Hi1YHEkA3Oqhk92m7tc5qixrGzQ1joloHgwnWppAgtJxt1qypkBFKpL7CdfFjeL8h4T-8sm26xHtDbWlj0ZUicv82jQwJsuwUY1ETfZZmXJUABf-FftFpTp0G0RVkAiY1vlmGqSG6gzTrgw/s1280/59d42d63-0d23-4e60-8309-43fc805d5a13.jpg",
+                // Array Links untuk Nivyan
+                links: [
+                    { url: "https://nivyanabdillah-cmd.github.io/tiket-sumber-segran/", label: "Tiket Sumber Segaran" },
+                    { url: "https://nivyanabdillah-cmd.github.io/sumber-segaran-prigen/", label: "Sumber Segaran Prigen" } // Link Diperbarui
+                ]
+            }
+        ];
+
+        // Header Scroll Effect
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Intersection Observer for Scroll Animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTeam();
+            observeElements();
+        });
+
+        function observeElements() {
+            document.querySelectorAll('.reveal-on-scroll').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        function renderTeam() {
+            const grid = document.getElementById('teamGrid');
+            grid.innerHTML = '';
+
+            teamMembers.forEach((member, index) => {
+                const card = document.createElement('div');
+                card.className = 'member-card reveal-on-scroll';
+                card.style.transitionDelay = `${index * 100}ms`;
+                
+                // Logic: Render Multi-Link Button jika ada
+                let linksHtml = '';
+                if (member.links && member.links.length > 0) {
+                    linksHtml += '<div class="project-links-wrapper">';
+                    member.links.forEach(link => {
+                        linksHtml += `
+                            <a href="${link.url}" target="_blank" class="project-link-btn">
+                                <i class="fa-solid fa-external-link-alt"></i> ${link.label}
+                            </a>`;
+                    });
+                    linksHtml += '</div>';
+                }
+
+                card.innerHTML = `
+                    <img src="${member.avatar}" alt="${member.name}" class="member-img">
+                    <h3 class="member-name">${member.name}</h3>
+                    <p class="member-role">${member.role}</p>
+                    
+                    ${linksHtml}
+                    
+                    <div class="upload-zone" onclick="triggerUpload(${member.id})">
+                        <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+                        <span class="upload-text">Unggah Berkas</span>
+                        <input type="file" id="fileInput-${member.id}" onchange="handleFileSelect(${member.id}, this)">
+                    </div>
+                    
+                    <div class="file-list" id="fileList-${member.id}"></div>
+                `;
+                grid.appendChild(card);
+
+                // Setup Drag & Drop
+                const zone = card.querySelector('.upload-zone');
+                zone.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    zone.style.borderColor = 'var(--accent-secondary)';
+                    zone.style.background = 'rgba(157, 78, 221, 0.15)';
+                });
+                zone.addEventListener('dragleave', () => {
+                    zone.style.borderColor = 'rgba(255,255,255,0.2)';
+                    zone.style.background = 'rgba(0,0,0,0.3)';
+                });
+                zone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    zone.style.borderColor = 'rgba(255,255,255,0.2)';
+                    zone.style.background = 'rgba(0,0,0,0.3)';
+                    if(e.dataTransfer.files.length) processFile(member.id, e.dataTransfer.files[0]);
+                });
+
+                observer.observe(card);
+                loadFiles(member.id);
+            });
+        }
+
+        function triggerUpload(id) {
+            document.getElementById(`fileInput-${id}`).click();
+        }
+
+        function handleFileSelect(id, input) {
+            if(input.files.length) {
+                processFile(id, input.files[0]);
+                input.value = ''; 
+            }
+        }
+
+        function processFile(memberId, file) {
+            const filePreviewUrl = URL.createObjectURL(file);
+            const isImage = file.type.startsWith('image/');
+
+            const fileData = {
+                name: file.name,
+                size: (file.size / 1024).toFixed(1) + ' KB',
+                type: file.type,
+                date: new Date().toLocaleDateString('id-ID'),
+                preview: isImage ? filePreviewUrl : null
+            };
+
+            const key = `sekala_art_${memberId}`;
+            let existing = JSON.parse(localStorage.getItem(key) || "[]");
+            existing = existing.filter(f => f.name !== file.name);
+            existing.unshift(fileData); 
+            localStorage.setItem(key, JSON.stringify(existing));
+
+            addFileToUI(memberId, fileData);
+            showToast('Berkas berhasil disimpan di cloud lokal.');
+        }
+
+        function loadFiles(id) {
+            const key = `sekala_art_${id}`;
+            const files = JSON.parse(localStorage.getItem(key) || "[]");
+            files.forEach(f => addFileToUI(id, f));
+        }
+
+        function addFileToUI(id, file) {
+            const container = document.getElementById(`fileList-${id}`);
+            const item = document.createElement('div');
+            item.className = 'file-item';
+            
+            let previewHtml = '';
+            if (file.type && file.type.startsWith('image/')) {
+                const src = file.preview ? file.preview : ''; 
+                if(src) {
+                    previewHtml = `<img src="${src}" class="file-preview" alt="preview">`;
+                } else {
+                    previewHtml = `<i class="fa-solid fa-image" style="color:var(--text-muted); font-size:1.2rem;"></i>`;
+                }
+            } else {
+                previewHtml = `<i class="fa-solid fa-file" style="color:var(--text-muted); font-size:1.2rem;"></i>`;
+            }
+
+            item.innerHTML = `
+                <div class="file-info">
+                    ${previewHtml}
+                    <span class="file-name">${file.name}</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <span style="font-size:0.7rem; color:var(--text-muted)">${file.size}</span>
+                    <i class="fa-solid fa-trash delete-action" onclick="deleteFile(${id}, '${file.name}')" aria-label="Hapus Berkas"></i>
+                </div>
+            `;
+            container.prepend(item);
+        }
+
+        function deleteFile(id, name) {
+            const key = `sekala_art_${id}`;
+            let files = JSON.parse(localStorage.getItem(key) || "[]");
+            const newFiles = files.filter(f => f.name !== name);
+            localStorage.setItem(key, JSON.stringify(newFiles));
+            
+            const container = document.getElementById(`fileList-${id}`);
+            container.innerHTML = '';
+            newFiles.forEach(f => addFileToUI(id, f));
+            showToast('Berkas dihapus.');
+        }
+
+        function showToast(msg) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<i class="fa-solid fa-check"></i> ${msg}`;
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(20px)';
+                setTimeout(() => toast.remove(), 400);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
