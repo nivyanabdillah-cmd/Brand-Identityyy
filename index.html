@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeri Pengembangan - Adinda Ayu Wulandari</title>
+    
+    <!-- Font Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- CSS Variables --- */
+        :root {
+            --bg-body: #0f172a;       
+            --bg-card: #1e293b;       
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;        
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 0; 
+        }
+
+        /* --- Layout Container --- */
+        .layout-container {
+            max-width: 1600px; 
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem; 
+            flex: 1; 
+            padding: 1.5rem 1.5rem 2rem 1.5rem; 
+        }
+
+        /* --- Header --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .brand h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem; 
+            color: var(--text-main);
+        }
+
+        .brand span {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--accent);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 0.25rem;
+        }
+
+        /* --- Slider Area --- */
+        .slider-wrapper {
+            position: relative;
+            width: 100%;
+            height: 75vh; 
+            background-color: var(--bg-card);
+            border-radius: 8px; 
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); 
+            border: 1px solid rgba(255,255,255,0.1);
+            flex-grow: 1; /* Agar slider memenuhi sisa ruang vertikal jika dibutuhkan */
+        }
+
+        /* Container gambar */
+        .slider-track {
+            display: flex;
+            height: 100%;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            scrollbar-width: none; /* Firefox */
+        }
+        .slider-track::-webkit-scrollbar {
+            display: none; /* Chrome/Safari */
+        }
+
+        .slide-item {
+            min-width: 100%;
+            height: 100%;
+            scroll-snap-align: start;
+            position: relative;
+            background-color: #0f172a; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide-item img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain; /* Memastikan gambar utuh tanpa potong */
+            object-position: center;
+            display: block;
+            filter: brightness(0.9); 
+            transition: filter 0.5s ease, transform 0.7s ease;
+        }
+        
+        .slider-wrapper:hover .slide-item img {
+            filter: brightness(1.0); 
+            transform: scale(1.02); 
+        }
+
+        /* --- Tombol Navigasi --- */
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(15, 23, 42, 0.4); 
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            backdrop-filter: blur(4px);
+            opacity: 0; /* Sembunyi default agar foto lebih clean */
+        }
+        
+        .slider-wrapper:hover .nav-btn {
+            opacity: 1; /* Muncul saat hover */
+        }
+
+        .nav-btn:hover { background: var(--accent); color: #000; border-color: var(--accent); }
+        .prev-btn { left: 20px; }
+        .next-btn { right: 20px; }
+
+        /* Indicators Bulat */
+        .indicators {
+            position: absolute;
+            bottom: 25px;
+            right: 40px;
+            display: flex;
+            gap: 10px;
+            z-index: 20;
+        }
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .dot:hover { background: rgba(255,255,255,0.6); }
+        .dot.active { background: var(--accent); transform: scale(1.3); }
+
+        /* --- Responsive --- */
+        @media (max-width: 768px) {
+            .layout-container { padding: 1rem; }
+            .slider-wrapper { height: 60vh; border-radius: 0; margin: -1rem; width: calc(100% + 2rem); } 
+            .nav-btn { opacity: 1; width: 40px; height: 40px; } /* Tetap tampil di mobile */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="layout-container">
+        <!-- Header -->
+        <header>
+            <div class="brand">
+                <h1>Galeri Proyek</h1>
+                <span>Adinda Ayu Wulandari</span>
+            </div>
+        </header>
+
+        <!-- Slider Horizontal -->
+        <div class="slider-wrapper">
+            <div class="slider-track" id="sliderTrack">
+                
+                <!-- 15 Slide Items (Tanpa Teks Overlay) -->
+                <!-- Menggunakan seed 'adinda_XX' untuk variasi gambar yang konsisten -->
+                
+                <div class="slide-item"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjWiWRasb6T_u498NHEbbb7MmX1_po1c7efFF7TwmWv2Q45c2UKfRHhNHZkjiycVXDb1Mcy8UETjdj8LUpIYj2PzS_tl33m2qOvWYtIZpBQNJXxNcV1009whTxOW-KHev2ZNjgkjcgFFtjeXjvWhYSgylUD-eLqr7M5jcjaR3KPIIFYQjCgr5AvJ7mI7M5k/s2000/11.png" alt="Foto 1"></div>
+                <div class="slide-item"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhMyScahJS7NJOm7qqy7ebyjlp3-2EiS8rRK-f_99hThiaH7EqI7k21PHcQbO6ZxPsTIsGn_-C3-1p71jn-Qg7fDrS1HalNMb1huF4mn_wedf17BJQdYBV_gHikeQNsi6quxK0E8NZTOcJv3s6nB6iY6Y-y87KDriqbhMwx5oTCzayBvlGPwcUm4653IZUf/s2000/2%20(1).png" alt="Foto 2"></div>
+                <div class="slide-item"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgXz02xVPh6ZVhALuNOBA6eYXCEZ3u_GO2afwpj_JiXlaDRdmVRp4hVb5mCY-QVx8GxmK5bxvIeX53IcnNRK6-zhKeNY82VcKsQhIi2IknrLquE8WrnrUBG_1kOpFdNX9nupoIY2DD-PQtN0Ta13ZcjgRlNnaAqd8GXlbXpv9n6o7deWhlE7T6yCchYOQld/s2000/3%20(1).png" alt="Foto 3"></div>
+                <div class="slide-item"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi3TVYeUBsehJoTNybQO49vTPQEVsMTaeo3UXI2m0QFNTvBOCvjv2kUt5GhcaDnEnv3PshfKpjbmb7xmWh2p6aBQCX89StePr7LG0Q5nIfWyAvUqn6blLUVT3Q5CttZyO0MDTpJXO47HfKnGpA-Jmi-_scZqG2SkEx1E6wtLI2-gmoB6KBAtyekzjpnkPuZ/s2000/4%20(1).png" alt="Foto 4"></div>
+                <div class="slide-item"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiMlF4EsV7QP-JBSdSfPdXiegPrC3uSiRpzl9K__-Zrave_f2VDE_KqnN9b1e2ENK3r9BKEpvHenInloCaE8sAgFOxFawqV8KnmwkmnTpExRzxLiLUxbFwLtaE_tcb3AhhJTA8Cpk9W2Eh-92ZpkhdUXw6f7zZUU4k9MyXjHTQx0rvW0Pgj5DWxQcv-iAWq/s2000/5%20(1).png" alt="Foto 5"></div>
+                <div class="slide-item"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhQ5XchisPMrWrz4kCmebLTNrb3ARrjRtwRQcOwKcXsZs6p2IF2Qv3CMu8JnDgU7dDfV-trPEjNaFQwEEBOJFuJFh0XLTdif5tiFwkR4vPqEQkAjVLmOz8nBBjzhsy4vacRJtUcOXpSRIDAMdrsQikxU4rIzN9ahESyUf92jhmCCoNnRZj5MNkDMDjHrS5z/s2000/6%20(1).png" alt="Foto 6"></div>
+                <div class="slide-item"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi3LGz9VPEOR4yoxAZUQGdQymu2H5bDxqZ2TUc_M8IVJ-VacpkLXQ3ZgiWj1GH8_FGi1-1c4Gv5JVSlT2Zeqf9rmM43e8c9qlWMMB957ddz0JhWVy6t3PCCzdxpKDoQXmWOqIULE6-9w5Jee3wp1-VGsVKaWvFeVVW97HFIEXsAV8LpYamrQRP4ZW3JD-q9/s2000/7%20(1).png" alt="Foto 7"></div>
+                <div class="slide-item"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgdDao6IN37m-LCA0ZAjDLjDsk2xUZXUy9x99dL6NwR-v7S92flYO51N-zfcQlJiGYMby1JYwsv9qdVK7YDLU9rIlo7XEEt-yhE-_ZsUtoVADa96_RqHtErfmZ1fXhh5maU1X-1pwDoJqlzrKRD-vdlZpHG6RWP-iG5rYN43M_sSGiJ8lGzLH5oLh1YyZs8/s2000/8%20(1).png" alt="Foto 8"></div>
+                <div class="slide-item"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiMwt1-g1R5gwLpVYO93vFhaa60bGO9MT1WLpmlqdEH6CAnhKPtOOrZNZS7tNubXLKX9BXLW_A60-8EjES6berTGnzNtQcsDWy9SdI_2pS4Fu-tQ1wCZ6Hzts_tUJejVQwSl1LHF4HJgM4pb_9LtOSp38ERSkQmafc35QTduhmiszn10UujC1bAdW_98jMS/s2000/PORTOFOLIO%20(29.7%20x%2021%20cm)%20(1).png" alt="Foto 9"></div>
+                <div class="slide-item"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhI3nH2yXF0mhXGFNWO4ehkCnXl2XeNsav2xeCEaU3JsWd0MJ-vNYA6ixLucJcr3WfF9T3e6sSAq3cZ-m5_pALM9hNw8fEQmlFZHSvg9nP79EsJkbID6fNf9az4if96pyb7_xreQmQFaywgFE_OaFkAtUfHmwlveW6q4lHmY2kfP8xgERoyz8CfgIhXkDTd/s2000/10.png" alt="Foto 10"></div>
+                <div class="slide-item"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj_xXh-S1CeArFT3ySkGP-RxAGIfDlt9TkBMhXrnGiTrjPNyOgG4N4zDBkfluwskb9UPNh7jtPXulEMSl0-2MaqHmk3GA0GHVZAIJJ43e0k7bkrtBLjmCYmWV42EoSjcfW9lopV6ExC2nAStEVkAix6-GnloviY-IKRx1acpw7YR9nfVXv3DRxEIzWfJXWZ/s2000/bb.png" alt="Foto 11"></div>
+                <div class="slide-item"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjKtvfXGuBoWus5mh5VTeYB9_-6R8rzykhtIzryFCbfVVpUEAK6qhBsvipRDN_9dk-eQ9kYVI-lCu_Z7ptFpLOVa-by4Y6j3PT4KGXTdMFEl3KpMsZmZfvqjXpXTUBabEExwFbo4tdRsdKHxtrUEln1YzFKrE5F6ikNOi3w7mrfjYLQBcO__LqbKa5P_SIF/s2000/12.png" alt="Foto 12"></div>
+                <div class="slide-item"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjiPE6bSeLdhdQBnZO468WNWvhHQag0Yf3BltvxlG3PyXAkKmWPY3G7-gwH8bN4F8hyrtqefSAa0AiRUMw9_RV096QxFdee87AsT_-4XLmyTsoFWuZuC-JNqKmGHfUCl9sP_0fR15X_Tn9vMw0UDNifbvZGDclJ175ns3zbNWUAcc45aX98mtWJUWPlq6sT/s2000/PORTOFOLIO%20(29.7%20x%2021%20cm).png" alt="Foto 13"></div>
+                <div class="slide-item"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhIAQwbrk6gFsY8Ukpw-0SGcsDHGCiXub5uUbewi6Lr5TK5646RG1sIuq8LVJRp5xgTa8UCoKKOe48Oyw5EakP7wNzOZ3A_xPEunj5cDQN8k5vQ-5BInVQzXE_vEWGj622ROUj2lAC5PRt4oEcwy1uv9r4fRw-FXx1NRCrdDOJuCZm5ili1tycYCIHWSGxt/s2000/14.png" alt="Foto 14"></div>
+                <div class="slide-item"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg9LD18SuDxucua0JGj6w0A9p4OhtyscdcppN_HZ7HAl0El8ZoETiSkxKaaYLmFPzfCdur7QMj7LFYkO6i0R2Vuj1xBl-G4iVW3G07pT6eAoSL4j_n1_SKq0TjvIV8SfEy36vr3uT5nrRGo0Is77OV8x3OnPLaAW1ET5fJaGH9faky9ezjUWjgQUXo0-lVg/s2000/15.png" alt="Foto 15"></div>
+
+            </div>
+
+            <button class="nav-btn prev-btn" id="prevBtn">&#10094;</button>
+            <button class="nav-btn next-btn" id="nextBtn">&#10095;</button>
+            <div class="indicators" id="indicators"></div>
+        </div>
+        
+        <!-- Bagian bawah (Kontak) sudah dihapus sesuai permintaan -->
+
+    </div>
+
+    <script>
+        const track = document.getElementById('sliderTrack');
+        const slides = document.querySelectorAll('.slide-item');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const indicatorsContainer = document.getElementById('indicators');
+        
+        let currentIndex = 0;
+
+        // 1. Buat Indicators
+        slides.forEach((_, index) => {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if(index === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => {
+                scrollToSlide(index);
+            });
+            indicatorsContainer.appendChild(dot);
+        });
+
+        const dots = document.querySelectorAll('.dot');
+
+        // 2. Fungsi Scroll
+        function scrollToSlide(index) {
+            currentIndex = index;
+            const slideWidth = slides[0].clientWidth;
+            track.scrollTo({
+                left: slideWidth * index,
+                behavior: 'smooth'
+            });
+            updateDots(index);
+        }
+
+        function updateDots(index) {
+            dots.forEach(d => d.classList.remove('active'));
+            if(dots[index]) dots[index].classList.add('active');
+        }
+
+        // 3. Event Listeners Tombol
+        nextBtn.addEventListener('click', () => {
+            if (currentIndex < slides.length - 1) {
+                scrollToSlide(currentIndex + 1);
+            } else {
+                scrollToSlide(0); 
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentIndex > 0) {
+                scrollToSlide(currentIndex - 1);
+            } else {
+                scrollToSlide(slides.length - 1); 
+            }
+        });
+
+        // 4. Deteksi Scroll Manual
+        track.addEventListener('scroll', () => {
+            const slideWidth = slides[0].clientWidth;
+            const newIndex = Math.round(track.scrollLeft / slideWidth);
+            
+            if (newIndex !== currentIndex) {
+                currentIndex = newIndex;
+                updateDots(newIndex);
+            }
+        });
+        
+    </script>
+</body>
+</html>
